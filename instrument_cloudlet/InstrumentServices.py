@@ -44,7 +44,7 @@ class InstrumentServices:
             with open(localPath, 'rb') as f:
                 contents = base64.b64encode(f.read())
                 # Configuration specific to storage cloudlet
-                r = requests.post('52.91.224.85:8081/storageApi/receiveImage', contents)
+                r = requests.post('http://52.91.224.85:8081/storageApi/receiveImage', contents)
                 return{"status": r.status_code}
         except Exception as e:
             print(str(e))
