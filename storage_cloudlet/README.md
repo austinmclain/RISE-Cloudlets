@@ -3,4 +3,7 @@
 2. SSH into the instance
 3. Use git to clone this repo
 5. Navigate to the storage cloudlet directory within the repo
-6. Run the following command:
+6. Run the following commands:
+```
+sudo yum update -y
+sudo yum install git -y
