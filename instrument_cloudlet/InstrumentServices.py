@@ -1,6 +1,6 @@
 from paramiko import SSHClient, AutoAddPolicy
 import requests
-import os
+import base64
 
 class InstrumentServices:
     def __init__(self):
@@ -43,8 +43,9 @@ class InstrumentServices:
             self.__downloadImage(remotePath, localPath)
             with open(localPath, 'rb') as f:
                 # Configuration specific to storage cloudlet
-                r = requests.post('http://localhost:8080', files={localPath: f})
-                return{"response": r.text}
+                contents = base64.b64encode(f.read())
+                r = requests.post('http://localhost:8081/storageApi/receiveImage', contents)
+                return{"status": r.status_code}
         except Exception as e:
             print(str(e))
             return{"status": 0, "msg": "Error msg " + str(e)}
