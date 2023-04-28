@@ -1,12 +1,24 @@
 from flask import Flask
-from connection import ssh_connection
+from InstrumentServices import InstrumentServices
+import requests
 
 app = Flask(__name__)
 
-@app.route("/cloudletApi", methods=['GET'])
-def cloudletApi():
+@app.route("/instrumentApi/runCommand", methods=['GET'])
+def runCommand():
     try:
-        return ssh_connection('ls')
+        services = InstrumentServices()
+        return services.runCommand('ls')
+    except Exception as e:
+        return e
+    
+@app.route("/instrumentApi/uploadImage", methods=['GET'])
+def uploadImage():
+    try:
+        remotePath = 'experiment_1/Misc_pollen.jpg'
+        localPath = 'image_1.png'
+        services = InstrumentServices()
+        return services.uploadImage(remotePath, localPath)
     except Exception as e:
         return e
 
