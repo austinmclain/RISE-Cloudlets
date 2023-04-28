@@ -15,4 +15,4 @@ pip install -r requirements.txt
 python3 main.py
 ```
 
-Please note that an IAM role with proper permissions must be assigned to the EC2 instance.
+Please note that an IAM role with the "AmazonS3FullAccess" policy must be assigned to the EC2 instance.
