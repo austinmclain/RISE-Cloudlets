@@ -16,5 +16,6 @@ class StorageServices:
             self.__downloadImage(localPath, contents)
             client = boto3.client('s3', region_name='us-east-1')
             client.upload_file(localPath, 'rise-bucket123', localPath)
+            return{"status": 'success'}
         except Exception as e:
             print(e)
