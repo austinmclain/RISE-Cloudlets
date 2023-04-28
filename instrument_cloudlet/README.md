@@ -8,4 +8,4 @@
 curl -O https://upload.wikimedia.org/wikipedia/commons/a/a4/Misc_pollen.jpg
 ```
 
-The EC2 instance is now ready to be used as a mock SEM.
+The EC2 instance is now ready to be used as a mock SEM with one image of cells.
