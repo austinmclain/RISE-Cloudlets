@@ -1,9 +1,18 @@
 # Storage Cloudlet Setup
 1. Create an EC2 instance (Amazon Linux)
 2. SSH into the instance
-3. Use git to clone this repo
-5. Navigate to the storage cloudlet directory within the repo
-6. Run the following commands:
+3. Run the following commands:
 ```
 sudo yum update -y
 sudo yum install git -y
+sudo yum -y install python-pip
+git clone https://github.com/austinmclain/RISE-Cloudlets.git
+cd RISE-Cloudlets/storage_cloudlet
+pip install virtualenv
+virtualenv -p python3 my-env
+source my-env/bin/activate
+pip install -r requirements.txt
+python3 main.py
+```
+
+Please note that an IAM role with proper permissions must be assigned to the EC2 instance.
