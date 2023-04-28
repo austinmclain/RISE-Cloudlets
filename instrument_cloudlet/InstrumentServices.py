@@ -2,7 +2,7 @@ from paramiko import SSHClient, AutoAddPolicy
 import requests
 import os
 
-class ssh_connection:
+class InstrumentServices:
     def __init__(self):
         try:
             self.client = SSHClient()
@@ -17,26 +17,34 @@ class ssh_connection:
             print(str(e))
             return{"status": 0, "msg": "Connection not established with server"}
         
-    def download(self, imagePath):
-        try:
-            sftp = self.client.open_sftp()
-            localpath = 'image_1.jpg'
-            remotepath = imagePath
-            sftp.get(remotepath, localpath)
-            sftp.close()
-            self.client.close()
-            return{"status": 1, "msg": "command ran successfully", "data": localpath}
-        except Exception as e:
-            print(str(e))
-            return{"status": 0, "msg": "Error msg " + str(e)}
-
-    def command(self, cmd):
+    def runCommand(self, cmd):
         try:
             (stdin, stdout, stderr) = self.client.exec_command(cmd)
             cmd_output = stdout.read().decode()
             self.client.close()
             return{"status": 1, "msg": "command ran successfully", "data": cmd_output}
+        except Exception as e:
+            print(str(e))
+            return{"status": 0, "msg": "Error msg " + str(e)}
+        
+    def __downloadImage(self, remotePath, localPath):
+        try:
+            sftp = self.client.open_sftp()
+            sftp.get(remotePath, localPath)
+            sftp.close()
+            self.client.close()
+            return{"status": 1, "msg": "image downloaded successfully", "data": localPath}
+        except Exception as e:
+            print(str(e))
+            return{"status": 0, "msg": "Error msg " + str(e)}
 
+    def uploadImage(self, remotePath, localPath):
+        try:
+            self.__downloadImage(remotePath, localPath)
+            with open(localPath, 'rb') as f:
+                # Configuration specific to storage cloudlet
+                r = requests.post('http://localhost:8080', files={localPath: f})
+                return{"response": r.text}
         except Exception as e:
             print(str(e))
             return{"status": 0, "msg": "Error msg " + str(e)}

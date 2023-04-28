@@ -1,21 +1,24 @@
 from flask import Flask
-from connection import ssh_connection
+from InstrumentServices import InstrumentServices
+import requests
 
 app = Flask(__name__)
 
-@app.route("/instrumentApi/command", methods=['GET'])
-def command():
+@app.route("/instrumentApi/runCommand", methods=['GET'])
+def runCommand():
     try:
-        ssh = ssh_connection()
-        return ssh.command('ls')
+        services = InstrumentServices()
+        return services.runCommand('ls')
     except Exception as e:
         return e
     
-@app.route("/instrumentApi/download", methods=['GET'])
-def download():
+@app.route("/instrumentApi/uploadImage", methods=['GET'])
+def uploadImage():
     try:
-        ssh = ssh_connection()
-        return ssh.download('experiment_1/Misc_pollen.jpg')
+        remotePath = 'experiment_1/Misc_pollen.jpg'
+        localPath = 'image_1.png'
+        services = InstrumentServices()
+        return services.uploadImage(remotePath, localPath)
     except Exception as e:
         return e
 
