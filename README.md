@@ -1,6 +1,9 @@
 # RISE-Cloudlets
+Cloudlet setup and APIs for RISE project.
+## Instructions
+Please navigate to each cloudlet directory and follow the given setup instructions.
+By the end, you will have:
+- Three EC2 instances
+- One S3 bucket
 
-To create a virtual environment for a given directory, please use the following commands:
-```
-virtualenv -p python3 <ENV_NAME>
-pip install -r requirements.txt
+This will take about 15 minutes.
