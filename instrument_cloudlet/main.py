@@ -1,24 +1,23 @@
-from flask import Flask
+from flask import Flask, request
 from InstrumentServices import InstrumentServices
 import requests
 
 app = Flask(__name__)
 
-@app.route("/instrumentApi/runCommand", methods=['GET'])
-def runCommand():
+@app.route("/instrumentApi/runExperiment", methods=['GET'])
+def runExperiment():
     try:
-        services = InstrumentServices()
-        return services.runCommand('ls')
+        sem = InstrumentServices()
+        return sem.runExperiment()
     except Exception as e:
         return e
     
-@app.route("/instrumentApi/uploadImage", methods=['GET'])
-def uploadImage():
+@app.route("/instrumentApi/saveImage", methods=['POST'])
+def saveImage():
     try:
-        remotePath = 'experiment_1/Misc_pollen.jpg'
-        localPath = 'image_1.png'
-        services = InstrumentServices()
-        return services.uploadImage(remotePath, localPath)
+        id = request.data
+        sem = InstrumentServices()
+        return sem.saveImage(id)
     except Exception as e:
         return e
 
