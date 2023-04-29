@@ -1,5 +1,6 @@
 # RISE-Cloudlets
 Cloudlet setup and APIs for RISE project.
+
 ## Instructions
 Please navigate to each cloudlet directory and follow the given setup instructions.
 By the end, you will have:
@@ -7,3 +8,5 @@ By the end, you will have:
 - One S3 bucket
 
 This will take about 15 minutes.
+
+## Usage
