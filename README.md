@@ -2,7 +2,7 @@
 Cloudlet setup and APIs for RISE project.
 
 ## Requirements
-To set this system up, you'll need:
+To set this system up, you will need:
 - An AWS account
 
 ## Instructions
