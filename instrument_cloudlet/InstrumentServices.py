@@ -1,51 +1,50 @@
 from paramiko import SSHClient, AutoAddPolicy
 import requests
 import base64
+import random
+
+from config import instrument_1, storage_cloudlet
 
 class InstrumentServices:
     def __init__(self):
-        try:
-            self.client = SSHClient()
-            self.client.set_missing_host_key_policy(AutoAddPolicy())
-            self.client.load_system_host_keys()
+        self.client = SSHClient()
+        self.client.set_missing_host_key_policy(AutoAddPolicy())
+        self.client.load_system_host_keys()
 
-            # Configuration specific to EC2 instance acting as SEM
-            self.client.connect('54.224.49.107', username='ec2-user',
-                        key_filename= "/Users/amac/Desktop/rise-project-key.pem")
+        self.client.connect(hostname=instrument_1['hostname'], 
+                            username=instrument_1['username'],
+                            key_filename=instrument_1['key_filename'])
+        
+    def __uploadToSem(self, sftp, id):
+        sftp.put(f'./images/img${id}.png', f'img${id}.png')
 
-        except Exception as e:
-            print(str(e))
-            return{"status": 0, "msg": "Connection not established with server"}
+    def __downloadFromSem(self, sftp, id):
+        sftp.get(f'img${id}.png', f'img${id}.png')
+
+    def __uploadToStorageCloudlet(self, image):
+        with open(image, 'rb') as f:
+            contents = base64.b64encode(f.read())
+            r = requests.post(storage_cloudlet['url'], contents)
+            return r.status_code
         
-    def runCommand(self, cmd):
-        try:
-            (stdin, stdout, stderr) = self.client.exec_command(cmd)
-            cmd_output = stdout.read().decode()
-            self.client.close()
-            return{"status": 1, "msg": "command ran successfully", "data": cmd_output}
-        except Exception as e:
-            print(str(e))
-            return{"status": 0, "msg": "Error msg " + str(e)}
-        
-    def __downloadImage(self, remotePath, localPath):
+    def runExperiment(self):
         try:
             sftp = self.client.open_sftp()
-            sftp.get(remotePath, localPath)
+            id = random.randint(1, 4)
+            self.__uploadToSem(sftp, id)
             sftp.close()
             self.client.close()
-            return{"status": 1, "msg": "image downloaded successfully", "data": localPath}
+            return {"status": 1, "msg": "command ran successfully", "data": f'img${id}.png'}
         except Exception as e:
-            print(str(e))
-            return{"status": 0, "msg": "Error msg " + str(e)}
-
-    def uploadImage(self, remotePath, localPath):
+            return {"status": 0, "msg": "error msg " + str(e)}
+    
+    def saveImage(self, id):
         try:
-            self.__downloadImage(remotePath, localPath)
-            with open(localPath, 'rb') as f:
-                contents = base64.b64encode(f.read())
-                # Configuration specific to storage cloudlet
-                r = requests.post('http://52.91.224.85:8081/storageApi/receiveImage', contents)
-                return{"status": r.status_code}
+            sftp = self.client.open_sftp()
+            self.__downloadFromSem(sftp, id)
+            sftp.close()
+            self.client.close()
+            status = self.__uploadToStorageCloudlet(f'img${id}.png')
+            return {"status": 1, "msg": "image saved successfully", "status": status}
         except Exception as e:
-            print(str(e))
-            return{"status": 0, "msg": "Error msg " + str(e)}
+            return {"status": 0, "msg": "error msg " + str(e)}
