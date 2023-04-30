@@ -1,6 +1,7 @@
 # Storage Cloudlet Setup
 1. Create an EC2 instance (Amazon Linux) with your security group and key pair.
-2. SSH into the instance
+2. Assign an IAM role with the "AmazonS3FullAccess" policy to the instance.
+3. Connect the instance.
 3. Run the following commands:
 ```
 sudo yum update -y
@@ -14,5 +15,3 @@ source my-env/bin/activate
 pip install -r requirements.txt
 python3 main.py
 ```
-
-Please note that an IAM role with the "AmazonS3FullAccess" policy must be assigned to the EC2 instance.
