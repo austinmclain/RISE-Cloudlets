@@ -25,7 +25,7 @@ class InstrumentServices:
         with open(image, 'rb') as f:
             contents = base64.b64encode(f.read())
             r = requests.post(storage_cloudlet['url'], contents)
-            return r.status_code
+            return r.json()
         
     def runExperiment(self):
         try:
@@ -44,7 +44,6 @@ class InstrumentServices:
             self.__downloadFromSem(sftp, id)
             sftp.close()
             self.client.close()
-            status = self.__uploadToStorageCloudlet(f'img{id}.png')
-            return {"status": 1, "msg": "image saved successfully", "status": status}
+            return self.__uploadToStorageCloudlet(f'img{id}.png')
         except Exception as e:
             return {"status": 0, "msg": "error msg " + str(e)}
