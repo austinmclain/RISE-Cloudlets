@@ -7,7 +7,7 @@ app = Flask(__name__)
 @app.route("/storageApi/", methods=['POST'])
 def storeImage():
     try:
-        return StorageServices.storeImage(f'1-${shortuuid.uuid()}.png', request.data)
+        return StorageServices.storeImage(f'1-{shortuuid.uuid()}.png', request.data)
     except Exception as e:
         return e
 
