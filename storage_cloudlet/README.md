@@ -1,5 +1,5 @@
 # Storage Cloudlet Setup
-1. Create an EC2 instance (Amazon Linux)
+1. Create an EC2 instance (Amazon Linux) with your security group and key pair.
 2. SSH into the instance
 3. Run the following commands:
 ```
