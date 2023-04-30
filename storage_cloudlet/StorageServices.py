@@ -2,17 +2,12 @@ import base64
 import boto3
 
 class StorageServices:
-    def __downloadImage(self, localPath, contents):
-        new_image = open(localPath, 'wb')
-        new_image.write(base64.b64decode(contents))
-        new_image.close()
-    
     # Note: This requires IAM configuration
-    def storeImage(self, localPath, contents):
+    def storeImage(self, uniqueId, contents):
+        image = f'1-{uniqueId}.png'
         try:
-            self.__downloadImage(localPath, contents)
-            client = boto3.client('s3', region_name='us-east-1')
-            client.upload_file(localPath, 'rise-bucket123', localPath)
-            return {"status": 1, "msg": "image stored successfully", "data": localPath}
+            s3 = boto3.resource('s3')
+            s3.Object('rise-bucket123', image).put(Body=contents, Metadata={'instrument': 1, 'project': 1})
+            return {"status": 1, "msg": "image stored successfully", "data": image}
         except Exception as e:
             return {"status": 0, "msg": "error msg " + str(e)}
