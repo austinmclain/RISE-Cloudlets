@@ -15,7 +15,7 @@ def runExperiment():
 @app.route("/instrumentApi/saveImage", methods=['POST'])
 def saveImage():
     try:
-        id = request.data
+        id = request.form['id']
         sem = InstrumentServices()
         return sem.saveImage(id)
     except Exception as e:
