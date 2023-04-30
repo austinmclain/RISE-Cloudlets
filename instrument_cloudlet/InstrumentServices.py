@@ -16,10 +16,10 @@ class InstrumentServices:
                             key_filename=instrument_1['key_filename'])
         
     def __uploadToSem(self, sftp, id):
-        sftp.put(f'./images/img${id}.png', f'img${id}.png')
+        sftp.put(f'./images/img{id}.png', f'img{id}.png')
 
     def __downloadFromSem(self, sftp, id):
-        sftp.get(f'img${id}.png', f'img${id}.png')
+        sftp.get(f'img{id}.png', f'img{id}.png')
 
     def __uploadToStorageCloudlet(self, image):
         with open(image, 'rb') as f:
@@ -34,7 +34,7 @@ class InstrumentServices:
             self.__uploadToSem(sftp, id)
             sftp.close()
             self.client.close()
-            return {"status": 1, "msg": "command ran successfully", "data": f'img${id}.png'}
+            return {"status": 1, "msg": "command ran successfully", "data": f'img{id}.png'}
         except Exception as e:
             return {"status": 0, "msg": "error msg " + str(e)}
     
@@ -44,7 +44,7 @@ class InstrumentServices:
             self.__downloadFromSem(sftp, id)
             sftp.close()
             self.client.close()
-            status = self.__uploadToStorageCloudlet(f'img${id}.png')
+            status = self.__uploadToStorageCloudlet(f'img{id}.png')
             return {"status": 1, "msg": "image saved successfully", "status": status}
         except Exception as e:
             return {"status": 0, "msg": "error msg " + str(e)}
