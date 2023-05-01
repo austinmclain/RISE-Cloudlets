@@ -2,7 +2,7 @@
 1. Create an S3 bucket.
 2. Create an EC2 instance (Amazon Linux) with your security group and key pair.
 3. Assign an IAM role with the "AmazonS3FullAccess" policy to the EC2 instance.
-4. Connect the instance.
+4. Connect to the instance.
 5. Run the following commands:
 ```
 sudo yum update -y
