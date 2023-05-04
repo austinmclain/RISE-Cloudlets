@@ -12,3 +12,12 @@ class StorageServices:
             return {"status": 1, "msg": "image stored successfully", "data": image}
         except Exception as e:
             return {"status": 0, "msg": "error msg " + str(e)}
+
+    def getImage(self, key):
+        try:
+            s3 = boto3.resource('s3')
+            response = s3.Object('rise-bucket123', key).get()
+            return response['Body'].read()
+        except Exception as e:
+            return {"status": 0, "msg": "error msg " + str(e)}
+        
