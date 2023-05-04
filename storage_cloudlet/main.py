@@ -14,7 +14,8 @@ def storeImage():
 def getImage():
     args = request.args
     key = args.get("key")
-    return getImage(key)
+    s3 = StorageServices()
+    return s3.getImage(key)
 
 
 if __name__ == "__main__":
